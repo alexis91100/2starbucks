@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inscription – Slow Coffee Lab</title>
 <style>
-/* --- Body et fond --- */
 body {
   font-family: "Poppins", sans-serif;
   background-color: #f7f3ef;
@@ -16,8 +15,6 @@ body {
   background-repeat: repeat;
   background-size: 120px;
 }
-
-/* --- Grains de café décoratifs flottants --- */
 .coffee-bean {
   position: absolute;
   width: 20px;
@@ -33,41 +30,21 @@ body {
 .coffee-bean:nth-child(3) { top: 30%; right: 70px; transform: rotate(10deg); }
 .coffee-bean:nth-child(4) { bottom: 60px; left: 30px; transform: rotate(-15deg); }
 
-/* --- Form container --- */
 .form-container, .confirmation-container {
   position: relative;
   background-color: #fffdf9;
   border-radius: 20px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   padding: 40px 50px;
-  max-width: 540px;
+  max-width: 650px;
   margin: 40px auto;
   border-top: 6px solid #00704A;
   z-index: 1;
   text-align: center;
 }
-
-/* Titres et texte */
-h1 {
-  color: #00704A;
-  font-size: 1.9rem;
-  margin-bottom: 10px;
-}
-p {
-  font-size: 0.95rem;
-  color: #5e514a;
-  margin-bottom: 30px;
-}
-
-/* Labels et inputs */
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #3e2f27;
-}
-
+h1 { color: #00704A; font-size: 1.9rem; margin-bottom: 10px; }
+p { font-size: 0.95rem; color: #5e514a; margin-bottom: 30px; }
+label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: #3e2f27; }
 input, select, textarea {
   width: 100%;
   padding: 12px;
@@ -78,7 +55,6 @@ input, select, textarea {
   background-color: #faf8f6;
   transition: all 0.25s ease;
 }
-
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #00704A;
@@ -86,8 +62,6 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 6px rgba(0,112,74,0.25);
   transform: scale(1.01);
 }
-
-/* Bouton */
 button {
   width: 100%;
   background-color: #00704A;
@@ -99,66 +73,68 @@ button {
   cursor: pointer;
   transition: all 0.3s ease;
 }
-button:hover {
-  background-color: #025c3c;
-  transform: scale(1.02);
-}
-
-/* Tableau disponibilités */
+button:hover { background-color: #025c3c; transform: scale(1.02); }
 #dispos { display: none; margin-bottom: 25px; }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #faf8f6;
-  border-radius: 10px;
-  overflow: hidden;
-}
-th, td {
-  border: 1px solid #d8cfc8;
-  text-align: center;
-  padding: 10px;
-  font-size: 0.9rem;
-}
+table { width: 100%; border-collapse: collapse; background-color: #faf8f6; border-radius: 10px; overflow: hidden; }
+th, td { border: 1px solid #d8cfc8; text-align: center; padding: 10px; font-size: 0.9rem; }
 th { background-color: #00704A; color: #fff; font-weight: 600; }
 tr.available:hover { background-color: #d8ede3; cursor: pointer; }
 tr.selected { background-color: #00704A; color: white; font-weight: 600; }
 td.full { color: #a27a65; font-style: italic; background-color: #f3efed; }
-#selection { font-size: 0.9rem; color: #00704A; font-weight: 600; margin-top: 10px; text-align: center; }
-
+#selection {
+  font-size: 0.95rem;
+  color: #00704A;
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
+  min-height: 24px;
+}
 #ville-container.hidden, #dispos.hidden { display: none; }
 .footer-note { text-align:center; font-size:0.8rem; color:#8c7d74; margin-top:15px; }
-
-/* Confirmation masquée par défaut */
 .confirmation-container { display: none; }
-
-@media (max-width: 600px) {
-  .form-container { padding: 30px 25px; }
-  th, td { font-size: 0.8rem; }
+#map-container { display:none; margin-top:20px; height:300px; width:100%; border-radius:12px; overflow:hidden; }
+#countdown { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+.countdown-card {
+  background-color: #00704A;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 70px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  font-family: "Poppins", sans-serif;
 }
+.countdown-card span {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.countdown-label {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  font-weight: 500;
+  color: #d8f0e2;
+}
+@media (max-width: 600px) { .form-container { padding: 30px 25px; } th, td { font-size:0.8rem; } }
 </style>
 </head>
 <body>
 
-<!-- Grains décoratifs flottants -->
 <div class="coffee-bean"></div>
 <div class="coffee-bean"></div>
 <div class="coffee-bean"></div>
 <div class="coffee-bean"></div>
 
-<!-- Formulaire -->
 <div class="form-container" id="form-container">
-  <img src="https://zupimages.net/up/25/42/0dek.png" alt="Starbucks Logo" style="width:80px; height:auto; display:block; margin:0 auto 20px;">
-
+  <img src="https://zupimages.net/up/25/42/0dek.png" alt="Starbucks Logo" style="width:80px; display:block; margin:0 auto 20px;">
   <h1>Slow Coffee Lab</h1>
   <p>Réservez votre place pour un atelier autour du café de spécialité.</p>
 
   <form id="reservation-form">
     <label for="name">Nom complet *</label>
     <input type="text" id="name" name="name" placeholder="Nom Prénom" required>
-
     <label for="email">Adresse e-mail *</label>
     <input type="email" id="email" name="email" placeholder="email@exemple.com" required>
-
     <label for="type">Type d’atelier *</label>
     <select id="type" name="type" required>
       <option value="">Choisir une option</option>
@@ -172,8 +148,11 @@ td.full { color: #a27a65; font-style: italic; background-color: #f3efed; }
       <select id="ville" name="ville">
         <option value="">Choisir une localisation</option>
         <option value="paris-opera">Starbucks Opéra – Paris</option>
+        <option value="paris-bastille">Starbucks Bastille – Paris</option>
         <option value="lyon-bellecour">Starbucks Bellecour – Lyon</option>
+        <option value="lyon-partdieu">Starbucks Part-Dieu – Lyon</option>
         <option value="bordeaux-chartrons">Starbucks Chartrons – Bordeaux</option>
+        <option value="bordeaux-meriadeck">Starbucks Mériadeck – Bordeaux</option>
       </select>
     </div>
 
@@ -190,49 +169,57 @@ td.full { color: #a27a65; font-style: italic; background-color: #f3efed; }
 
     <label for="message">Message (optionnel)</label>
     <textarea id="message" name="message" rows="4" placeholder="Une préférence ou une question ?"></textarea>
-
     <button type="submit">Réserver ma place</button>
   </form>
-
   <p class="footer-note">☕ Starbucks – Slow Coffee Lab © 2025</p>
 </div>
 
-<!-- Page de confirmation -->
 <div class="confirmation-container" id="confirmation-container">
   <h1>Réservation confirmée !</h1>
-  <p id="confirmation-text" style="font-size:1rem; color:#5e514a; margin-top:20px;"></p>
+  <p id="confirmation-text"></p>
+
+  <div id="map-container">
+    <iframe id="map-frame" src="" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+  </div>
+
+  <div id="countdown"></div>
+
+  <button id="new-reservation" style="margin-top:20px; background:#00704A; color:white; border:none; padding:12px 20px; border-radius:10px; cursor:pointer;">Faire une nouvelle réservation</button>
 </div>
 
 <script>
-// Gestion des disponibilités
+// Elements
 const typeSelect = document.getElementById('type');
 const villeContainer = document.getElementById('ville-container');
 const villeSelect = document.getElementById('ville');
 const dispoSection = document.getElementById('dispos');
 const dispoBody = document.getElementById('dispo-body');
-const selectionText = document.getElementById('selection');
-let selectedRow = null;
+const selectionTextEl = document.getElementById('selection');
+let selectedRowEl = null;
 
 const disponibilites = {
-  "paris-opera":[["15 octobre 2025","10h00","Complet"],["17 octobre 2025","14h00","5 places"],["19 octobre 2025","16h00","3 places"]],
-  "lyon-bellecour":[["16 octobre 2025","11h00","2 places"],["18 octobre 2025","15h30","Complet"],["20 octobre 2025","10h00","6 places"]],
-  "bordeaux-chartrons":[["14 octobre 2025","10h00","4 places"],["17 octobre 2025","14h30","Complet"],["21 octobre 2025","16h00","2 places"]]
+  "paris-opera":[["16 octobre 2025","10h00","5 places"],["17 octobre 2025","14h00","5 places"],["18 octobre 2025","16h00","3 places"]],
+  "paris-bastille":[["16 octobre 2025","11h00","5 places"],["17 octobre 2025","15h00","5 places"],["18 octobre 2025","16h30","3 places"]],
+  "lyon-bellecour":[["16 octobre 2025","11h00","2 places"],["17 octobre 2025","15h30","5 places"],["18 octobre 2025","10h00","6 places"]],
+  "lyon-partdieu":[["16 octobre 2025","10h30","3 places"],["17 octobre 2025","14h30","4 places"],["18 octobre 2025","16h30","2 places"]],
+  "bordeaux-chartrons":[["16 octobre 2025","10h00","4 places"],["17 octobre 2025","14h30","5 places"],["18 octobre 2025","16h00","2 places"]],
+  "bordeaux-meriadeck":[["16 octobre 2025","11h00","5 places"],["17 octobre 2025","15h30","3 places"],["18 octobre 2025","16h30","4 places"]]
 };
 
 typeSelect.addEventListener('change',()=> {
   if(typeSelect.value==="digital"){
     villeContainer.classList.add('hidden');
-    dispoSection.classList.add('hidden');
+    dispoSection.style.display='none';
   } else {
     villeContainer.classList.remove('hidden');
   }
 });
 
-villeSelect.addEventListener('change',()=> {
+villeSelect.addEventListener('change',()=>{
   const choix = villeSelect.value;
   dispoBody.innerHTML='';
-  selectionText.textContent='';
-  selectedRow=null;
+  selectionTextEl.textContent='';
+  selectedRowEl=null;
   if(choix && disponibilites[choix]){
     disponibilites[choix].forEach(([date,heure,places])=>{
       const tr=document.createElement('tr');
@@ -240,10 +227,10 @@ villeSelect.addEventListener('change',()=> {
       if(places!=="Complet"){
         tr.classList.add('available');
         tr.addEventListener('click',()=>{
-          if(selectedRow) selectedRow.classList.remove('selected');
+          if(selectedRowEl) selectedRowEl.classList.remove('selected');
           tr.classList.add('selected');
-          selectedRow=tr;
-          selectionText.textContent=`Vous avez sélectionné le ${date} à ${heure}.`;
+          selectedRowEl = tr;
+          selectionTextEl.textContent = `Vous avez sélectionné le ${date} à ${heure}.`;
         });
       } else {
         tr.querySelectorAll('td').forEach(td=>td.classList.add('full'));
@@ -256,33 +243,96 @@ villeSelect.addEventListener('change',()=> {
   }
 });
 
-// Gestion de la soumission
+// Map
+const starbucksMaps = {
+  "paris-opera": "Starbucks Opéra, Paris, France",
+  "paris-bastille": "Starbucks Bastille, Paris, France",
+  "lyon-bellecour": "Starbucks Bellecour, Lyon, France",
+  "lyon-partdieu": "Starbucks Part-Dieu, Lyon, France",
+  "bordeaux-chartrons": "Starbucks Chartrons, Bordeaux, France",
+  "bordeaux-meriadeck": "Starbucks Mériadeck, Bordeaux, France"
+};
+
+// Confirmation & compte à rebours
 const form = document.getElementById('reservation-form');
 const formContainer = document.getElementById('form-container');
 const confirmationContainer = document.getElementById('confirmation-container');
+const confirmationText = document.getElementById('confirmation-text');
+const mapFrame = document.getElementById('map-frame');
+const mapContainer = document.getElementById('map-container');
+const countdownEl = document.getElementById('countdown');
+const newReservationBtn = document.getElementById('new-reservation');
+
+function startCountdown(targetDate) {
+  function updateCountdown() {
+    const now = new Date();
+    const diff = targetDate - now;
+    if(diff <=0){
+      countdownEl.innerHTML = '<p style="color:#00704A;font-weight:600;">L’atelier est en cours ! ☕</p>';
+      clearInterval(interval);
+      return;
+    }
+    const days = Math.floor(diff/(1000*60*60*24));
+    const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
+    const seconds = Math.floor((diff%60000)/1000);
+    countdownEl.innerHTML = `
+      <div class="countdown-card"><span>${days}</span><div class="countdown-label">Jours</div></div>
+      <div class="countdown-card"><span>${hours}</span><div class="countdown-label">Heures</div></div>
+      <div class="countdown-card"><span>${minutes}</span><div class="countdown-label">Minutes</div></div>
+      <div class="countdown-card"><span>${seconds}</span><div class="countdown-label">Secondes</div></div>
+    `;
+  }
+  updateCountdown();
+  const interval = setInterval(updateCountdown,1000);
+}
 
 form.addEventListener('submit', function(e){
   e.preventDefault();
-
-  // Récupération des valeurs
   const name = document.getElementById('name').value;
-  const type = document.getElementById('type').value;
-  const ville = villeSelect.value ? villeSelect.options[villeSelect.selectedIndex].text : "en ligne";
-  const creneau = selectedRow ? `${selectedRow.cells[0].textContent} à ${selectedRow.cells[1].textContent}` : "";
+  const type = typeSelect.value;
+  const villeText = villeSelect.value ? villeSelect.options[villeSelect.selectedIndex].text : "en ligne";
+  const creneau = selectedRowEl ? `${selectedRowEl.cells[0].textContent} à ${selectedRowEl.cells[1].textContent}` : "";
 
-  // Création du message personnalisé
   let message = `Merci ${name} ! Votre réservation `;
-  message += type !== "digital" ? `au ${ville}` : "pour l'atelier digital";
+  message += type !== "digital" ? `au ${villeText}` : "pour l'atelier digital";
   if(creneau) message += ` le ${creneau}`;
-  message += " a bien été enregistrée. ☕";
+  message += " a bien été enregistrée ☕. Nous avons hâte de vous accueillir !";
+  confirmationText.textContent = message;
 
-  // Affichage du message
-  document.getElementById('confirmation-text').textContent = message;
+  if(type !== "digital" && starbucksMaps[villeSelect.value]){
+    mapFrame.src = `https://www.google.com/maps?q=${encodeURIComponent(starbucksMaps[villeSelect.value])}&output=embed`;
+    mapContainer.style.display = "block";
+  } else {
+    mapContainer.style.display = "none";
+  }
 
-  // Affichage
-  formContainer.style.display = 'none';
-  confirmationContainer.style.display = 'block';
+  if(selectedRowEl){
+    const dateParts = selectedRowEl.cells[0].textContent.split(" ");
+    const day = parseInt(dateParts[0]);
+    const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+    const month = monthNames.indexOf(dateParts[1].toLowerCase());
+    const year = parseInt(dateParts[2]);
+    const timeParts = selectedRowEl.cells[1].textContent.split("h");
+    const hour = parseInt(timeParts[0]);
+    const minute = parseInt(timeParts[1] || 0);
+    const targetDate = new Date(year, month, day, hour, minute, 0);
+    startCountdown(targetDate);
+  }
+
+  formContainer.style.display = "none";
+  confirmationContainer.style.display = "block";
+});
+
+newReservationBtn.addEventListener('click',()=>{
+  formContainer.style.display = "block";
+  confirmationContainer.style.display = "none";
+  form.reset();
+  dispoBody.innerHTML='';
+  selectionTextEl.textContent='';
+  mapContainer.style.display = "none";
+  countdownEl.innerHTML = '';
 });
 </script>
-
-</body
+</body>
+</html>
