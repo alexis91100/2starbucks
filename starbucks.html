@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscription – Slow Coffee Lab</title>
+<style>
+/* --- Body et fond --- */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f7f3ef;
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  background-image: url('https://cdn.pixabay.com/photo/2016/03/05/19/02/coffee-1236610_1280.jpg');
+  background-repeat: repeat;
+  background-size: 120px;
+}
+
+/* --- Grains de café décoratifs flottants --- */
+.coffee-bean {
+  position: absolute;
+  width: 20px;
+  height: 12px;
+  background: #4b2e12;
+  border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
+  opacity: 0.12;
+  transform: rotate(30deg);
+  z-index: 0;
+}
+.coffee-bean:nth-child(1) { top: 50px; left: 60px; }
+.coffee-bean:nth-child(2) { top: 80%; right: 40px; transform: rotate(-20deg); }
+.coffee-bean:nth-child(3) { top: 30%; right: 70px; transform: rotate(10deg); }
+.coffee-bean:nth-child(4) { bottom: 60px; left: 30px; transform: rotate(-15deg); }
+
+/* --- Form container --- */
+.form-container, .confirmation-container {
+  position: relative;
+  background-color: #fffdf9;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  padding: 40px 50px;
+  max-width: 540px;
+  margin: 40px auto;
+  border-top: 6px solid #00704A;
+  z-index: 1;
+  text-align: center;
+}
+
+/* Titres et texte */
+h1 {
+  color: #00704A;
+  font-size: 1.9rem;
+  margin-bottom: 10px;
+}
+p {
+  font-size: 0.95rem;
+  color: #5e514a;
+  margin-bottom: 30px;
+}
+
+/* Labels et inputs */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #3e2f27;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d8cfc8;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  background-color: #faf8f6;
+  transition: all 0.25s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #00704A;
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(0,112,74,0.25);
+  transform: scale(1.01);
+}
+
+/* Bouton */
+button {
+  width: 100%;
+  background-color: #00704A;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+button:hover {
+  background-color: #025c3c;
+  transform: scale(1.02);
+}
+
+/* Tableau disponibilités */
+#dispos { display: none; margin-bottom: 25px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #faf8f6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+th, td {
+  border: 1px solid #d8cfc8;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.9rem;
+}
+th { background-color: #00704A; color: #fff; font-weight: 600; }
+tr.available:hover { background-color: #d8ede3; cursor: pointer; }
+tr.selected { background-color: #00704A; color: white; font-weight: 600; }
+td.full { color: #a27a65; font-style: italic; background-color: #f3efed; }
+#selection { font-size: 0.9rem; color: #00704A; font-weight: 600; margin-top: 10px; text-align: center; }
+
+#ville-container.hidden, #dispos.hidden { display: none; }
+.footer-note { text-align:center; font-size:0.8rem; color:#8c7d74; margin-top:15px; }
+
+/* Confirmation masquée par défaut */
+.confirmation-container { display: none; }
+
+@media (max-width: 600px) {
+  .form-container { padding: 30px 25px; }
+  th, td { font-size: 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Grains décoratifs flottants -->
+<div class="coffee-bean"></div>
+<div class="coffee-bean"></div>
+<div class="coffee-bean"></div>
+<div class="coffee-bean"></div>
+
+<!-- Formulaire -->
+<div class="form-container" id="form-container">
+  <img src="https://zupimages.net/up/25/42/0dek.png" alt="Starbucks Logo" style="width:80px; height:auto; display:block; margin:0 auto 20px;">
+
+  <h1>Slow Coffee Lab</h1>
+  <p>Réservez votre place pour un atelier autour du café de spécialité.</p>
+
+  <form id="reservation-form">
+    <label for="name">Nom complet *</label>
+    <input type="text" id="name" name="name" placeholder="Nom Prénom" required>
+
+    <label for="email">Adresse e-mail *</label>
+    <input type="email" id="email" name="email" placeholder="email@exemple.com" required>
+
+    <label for="type">Type d’atelier *</label>
+    <select id="type" name="type" required>
+      <option value="">Choisir une option</option>
+      <option value="prive">Atelier privé</option>
+      <option value="public">Atelier public</option>
+      <option value="digital">Atelier digital</option>
+    </select>
+
+    <div id="ville-container">
+      <label for="ville">Sélectionnez votre Starbucks *</label>
+      <select id="ville" name="ville">
+        <option value="">Choisir une localisation</option>
+        <option value="paris-opera">Starbucks Opéra – Paris</option>
+        <option value="lyon-bellecour">Starbucks Bellecour – Lyon</option>
+        <option value="bordeaux-chartrons">Starbucks Chartrons – Bordeaux</option>
+      </select>
+    </div>
+
+    <div id="dispos">
+      <label>Disponibilités :</label>
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Heure</th><th>Places</th></tr>
+        </thead>
+        <tbody id="dispo-body"></tbody>
+      </table>
+      <div id="selection"></div>
+    </div>
+
+    <label for="message">Message (optionnel)</label>
+    <textarea id="message" name="message" rows="4" placeholder="Une préférence ou une question ?"></textarea>
+
+    <button type="submit">Réserver ma place</button>
+  </form>
+
+  <p class="footer-note">☕ Starbucks – Slow Coffee Lab © 2025</p>
+</div>
+
+<!-- Page de confirmation -->
+<div class="confirmation-container" id="confirmation-container">
+  <h1>Réservation confirmée !</h1>
+  <p>Merci pour votre réservation. Voici le récapitulatif :</p>
+  <ul style="text-align:left; padding-left:20px;">
+    <li><strong>Nom :</strong> <span id="conf-name"></span></li>
+    <li><strong>Email :</strong> <span id="conf-email"></span></li>
+    <li><strong>Type d’atelier :</strong> <span id="conf-type"></span></li>
+    <li><strong>Starbucks :</strong> <span id="conf-ville"></span></li>
+    <li><strong>Créneau :</strong> <span id="conf-creneau"></span></li>
+    <li><strong>Message :</strong> <span id="conf-message"></span></li>
+  </ul>
+</div>
+
+<script>
+// Gestion des disponibilités
+const typeSelect = document.getElementById('type');
+const villeContainer = document.getElementById('ville-container');
+const villeSelect = document.getElementById('ville');
+const dispoSection = document.getElementById('dispos');
+const dispoBody = document.getElementById('dispo-body');
+const selectionText = document.getElementById('selection');
+let selectedRow = null;
+
+const disponibilites = {
+  "paris-opera":[["15 octobre 2025","10h00","Complet"],["17 octobre 2025","14h00","5 places"],["19 octobre 2025","16h00","3 places"]],
+  "lyon-bellecour":[["16 octobre 2025","11h00","2 places"],["18 octobre 2025","15h30","Complet"],["20 octobre 2025","10h00","6 places"]],
+  "bordeaux-chartrons":[["14 octobre 2025","10h00","4 places"],["17 octobre 2025","14h30","Complet"],["21 octobre 2025","16h00","2 places"]]
+};
+
+typeSelect.addEventListener('change',()=> {
+  if(typeSelect.value==="digital"){
+    villeContainer.classList.add('hidden');
+    dispoSection.classList.add('hidden');
+  } else {
+    villeContainer.classList.remove('hidden');
+  }
+});
+
+villeSelect.addEventListener('change',()=> {
+  const choix = villeSelect.value;
+  dispoBody.innerHTML='';
+  selectionText.textContent='';
+  selectedRow=null;
+  if(choix && disponibilites[choix]){
+    disponibilites[choix].forEach(([date,heure,places])=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${date}</td><td>${heure}</td><td>${places}</td>`;
+      if(places!=="Complet"){
+        tr.classList.add('available');
+        tr.addEventListener('click',()=>{
+          if(selectedRow) selectedRow.classList.remove('selected');
+          tr.classList.add('selected');
+          selectedRow=tr;
+          selectionText.textContent=`Vous avez sélectionné le ${date} à ${heure}.`;
+        });
+      } else {
+        tr.querySelectorAll('td').forEach(td=>td.classList.add('full'));
+      }
+      dispoBody.appendChild(tr);
+    });
+    dispoSection.style.display='block';
+  } else {
+    dispoSection.style.display='none';
+  }
+});
+
+// Gestion de la soumission
+const form = document.getElementById('reservation-form');
+const formContainer = document.getElementById('form-container');
+const confirmationContainer = document.getElementById('confirmation-container');
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+
+  // Récupération des valeurs
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const type = document.getElementById('type').value;
+  const ville = villeSelect.value || "N/A";
+  const message = document.getElementById('message').value || "Aucun";
+  const creneau = selectedRow ? `${selectedRow.cells[0].textContent} à ${selectedRow.cells[1].textContent}` : "Non sélectionné";
+
+  // Injection dans la confirmation
+  document.getElementById('conf-name').textContent = name;
+  document.getElementById('conf-email').textContent = email;
+  document.getElementById('conf-type').textContent = type;
+  document.getElementById('conf-ville').textContent = ville;
+  document.getElementById('conf-creneau').textContent = creneau;
+  document.getElementById('conf-message').textContent = message;
+
+  // Affichage de la confirmation
+  formContainer.style.display = 'none';
+  confirmationContainer.style.display = 'block';
+});
+</script>
+
+</body>
+</html>
