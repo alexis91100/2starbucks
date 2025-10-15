@@ -200,15 +200,7 @@ td.full { color: #a27a65; font-style: italic; background-color: #f3efed; }
 <!-- Page de confirmation -->
 <div class="confirmation-container" id="confirmation-container">
   <h1>Réservation confirmée !</h1>
-  <p>Merci pour votre réservation. Voici le récapitulatif :</p>
-  <ul style="text-align:left; padding-left:20px;">
-    <li><strong>Nom :</strong> <span id="conf-name"></span></li>
-    <li><strong>Email :</strong> <span id="conf-email"></span></li>
-    <li><strong>Type d’atelier :</strong> <span id="conf-type"></span></li>
-    <li><strong>Starbucks :</strong> <span id="conf-ville"></span></li>
-    <li><strong>Créneau :</strong> <span id="conf-creneau"></span></li>
-    <li><strong>Message :</strong> <span id="conf-message"></span></li>
-  </ul>
+  <p id="confirmation-text" style="font-size:1rem; color:#5e514a; margin-top:20px;"></p>
 </div>
 
 <script>
@@ -274,25 +266,23 @@ form.addEventListener('submit', function(e){
 
   // Récupération des valeurs
   const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
   const type = document.getElementById('type').value;
-  const ville = villeSelect.value || "N/A";
-  const message = document.getElementById('message').value || "Aucun";
-  const creneau = selectedRow ? `${selectedRow.cells[0].textContent} à ${selectedRow.cells[1].textContent}` : "Non sélectionné";
+  const ville = villeSelect.value ? villeSelect.options[villeSelect.selectedIndex].text : "en ligne";
+  const creneau = selectedRow ? `${selectedRow.cells[0].textContent} à ${selectedRow.cells[1].textContent}` : "";
 
-  // Injection dans la confirmation
-  document.getElementById('conf-name').textContent = name;
-  document.getElementById('conf-email').textContent = email;
-  document.getElementById('conf-type').textContent = type;
-  document.getElementById('conf-ville').textContent = ville;
-  document.getElementById('conf-creneau').textContent = creneau;
-  document.getElementById('conf-message').textContent = message;
+  // Création du message personnalisé
+  let message = `Merci ${name} ! Votre réservation `;
+  message += type !== "digital" ? `au ${ville}` : "pour l'atelier digital";
+  if(creneau) message += ` le ${creneau}`;
+  message += " a bien été enregistrée. ☕";
 
-  // Affichage de la confirmation
+  // Affichage du message
+  document.getElementById('confirmation-text').textContent = message;
+
+  // Affichage
   formContainer.style.display = 'none';
   confirmationContainer.style.display = 'block';
 });
 </script>
 
-</body>
-</html>
+</body
